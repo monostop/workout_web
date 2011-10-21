@@ -1,0 +1,21 @@
+{% extends "layout.html" %}
+{% block body %}
+    <h3>Display current progress:</h3>
+    <form action="{{ url_for('show_graph') }}" method=post>
+        <select name='month'>
+            <option value=0>Show all progress</option>
+            <option value=9>September 2011</option>
+            <option value=10>October 2011</option>
+            <option value=11>November 2011</option>
+            <option value=12>December 2011</option>
+            <option value=1>January 2012</option>
+            <option value=2>February 2012</option>
+            <option value=3>March 2012</option>
+            <option value=4>April 2012</option>
+            <option value=5>May 2012</option>
+            <option value=6>June 2012</option>
+        </select>
+    <input type=submit value=Submit>
+    </form>
+    <img src="{{ url_for('graph_url') }}">
+{% endblock %}

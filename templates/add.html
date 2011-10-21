@@ -1,0 +1,18 @@
+{% extends "layout.html" %}
+{% block body %}
+<h3>Add new workout</h2>
+<form action="{{ url_for('add') }}" method=post>
+    <ul>
+        <li><p>Date:   <input type=text size=30 name=date> (ex: 2011-09-05)
+        <li><p>Value: <select name="value">
+            <option value="1">1 - Walk or very easy workout</option>
+            <option value="2">2 - Slow jog or equivavlent workout</option>
+            <option value="3">3 - A normal hard workout, high pulse</option>
+            <option value="4">4 - Very hard workout, needs rest</option>
+            <option value="5">5 - You are probably dead</option>
+        </select>
+        
+    </ul>
+    <input type=submit value=Submit>
+</form>
+{% endblock %}

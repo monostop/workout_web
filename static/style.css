@@ -1,0 +1,11 @@
+body            { background: #FAFFFF }
+.page           { margin: 2em auto; width: 40em; border: 5px solid #798589;
+                  padding: 0.5em; background: #F7F9FE; }
+.metanav        { text-align: right; font-size: 1em; padding: 0.4em;
+                   background: #DCE8EB; }
+.flash          { background: #BED2D9; padding: 0.5em; color: black;
+                  margin-top: 1em; border: 1px solid #AACBE2; }
+a, h1, h3 ,p    { color: #377BA8; font-family: 'Georgia', serif; }
+h1              { border-bottom: 2px solid #798589; }
+h3              { padding-bottom: 1px; }
+li              { list-style: none; margin}
