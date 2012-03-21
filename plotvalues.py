@@ -43,9 +43,9 @@ def plot_total(competitors, dates, values):
     ax.plot_date(mpl_dates, cumsum(plot_values['Viktor']), linestyle='-',
                                     marker='None', label='Viktor',color="green")
     ax.plot_date(mpl_dates, cumsum(plot_values['Kim']), linestyle='-',
-                                    marker='None', label='Kim', color="blue")
+                                    marker='None', label='Kim', color="red")
     ax.plot_date(mpl_dates, cumsum(plot_values['Olof']), linestyle='-',
-                                    marker='None', label='Olof', color="red")
+                                    marker='None', label='Olof', color="blue")
     #! -------------------------- !#
     
     ax.legend(loc=2)
@@ -95,9 +95,9 @@ def plot_month(competitors, year, month, dates, values):
     ax.plot_date(mpl_dates, cumsum(plot_values['Viktor']), linestyle='-',
                                 marker='None', label='Viktor', color='green')
     ax.plot_date(mpl_dates, cumsum(plot_values['Kim']), linestyle='-',
-                                    marker='None', label='Kim', color = 'blue')
+                                    marker='None', label='Kim', color = 'red')
     ax.plot_date(mpl_dates, cumsum(plot_values['Olof']), linestyle='-',
-                                    marker='None', label='Olof', color='red')
+                                    marker='None', label='Olof', color='blue')
     ax.legend(loc=2)
     
     # formatting
