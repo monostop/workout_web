@@ -3,6 +3,7 @@ from __future__ import with_statement
 from contextlib import closing
 import sqlite3
 import dateutil.parser
+import datetime
 from flask import Flask, request, session, g, redirect, url_for, abort,render_template, flash, make_response
 from plotvalues import plot_total, plot_month
 import gc
@@ -83,7 +84,10 @@ def show_graph():
     if request.method == 'POST':       
         session['month'] = request.form['month']   
     else:
-        session['month'] = '0'         
+        # Default to current month
+        today = datetime.datetime.now()
+        month = today.strftime("%m")
+        session['month'] = month         
     return render_template('show_graph.html', month = session['month'])
 
     
