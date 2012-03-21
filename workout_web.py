@@ -42,15 +42,14 @@ def add():
         try:                
             if bool(request.form['date']) and dateutil.parser.parse(request.form['date']):
                 # if user submits empty string dont insert anything into db.        
-                dateutil.parser.parse(request.form['date'])                  
                 g.db.execute('INSERT INTO '+session['user']+ '(date,value) VALUES (?,?)', \
                                  [request.form['date'],request.form['value']] ) 
                 g.db.commit() 
-                flash('Workout successfully submitted')   
+                added_date = dateutil.parser.parse(request.form['date'])
+                flash('A workout with value ' + request.form['value'] + ', successfully submitted on: ' + added_date.strftime("%A the %d of %B, %Y."))   
             else:
                 flash('No workout submitted, check formating!')         
-        except ValueError:
-            # need to print some error message.
+        except (ValueError, OverflowError):
             flash('No workout submitted, check formating!')
             pass              
     return render_template('add.html') 
