@@ -1,0 +1,22 @@
+{% extends "layout.html" %}
+{% block body %}
+<h3>Your Workouts:<h3>
+<form action="{{ url_for('admin') }}" method=post>
+    <table border="1">
+        <tr>
+            <th>Date</th>
+            <th>Value</th>
+            <th>Delete</th>
+        </tr>
+
+        {% for workout in workouts %}
+        <tr>
+            <th>{{ workout.date }}</th>
+            <th>{{ workout.value }}</th>
+            <th><input type="checkbox" value="delete" name="{{ workout.id }}"></th>
+        </tr>
+        {% endfor %}
+        </table>
+        <input type=submit value=Submit>
+</form>
+{% endblock %}

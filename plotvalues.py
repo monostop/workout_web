@@ -39,19 +39,22 @@ def plot_total(competitors, dates, values):
     fig = Figure(facecolor=color, edgecolor=color)
     ax = fig.add_subplot(111)
     mpl_dates = mpl.dates.date2num(plot_dates)
-    #! PART HAS TO BE GENERALIZED !#
-    ax.plot_date(mpl_dates, cumsum(plot_values['Viktor']), linestyle='-',
-                                    marker='None', label='Viktor',color="green")
-    ax.plot_date(mpl_dates, cumsum(plot_values['Kim']), linestyle='-',
-                                    marker='None', label='Kim', color="red")
-    ax.plot_date(mpl_dates, cumsum(plot_values['Olof']), linestyle='-',
-                                    marker='None', label='Olof', color="blue")
-    #! -------------------------- !#
+    plot_colors = ['green', 'blue', 'red']
     
-    ax.legend(loc=2)
-
+    for competitor, color in zip(competitors, plot_colors):
+        ax.plot_date(mpl_dates, cumsum(plot_values[competitor]), linestyle='-',
+                                    marker='None', label=competitor, color=color)
+    #! PART HAS TO BE GENERALIZED !#
+    #ax.plot_date(mpl_dates, cumsum(plot_values['Viktor']), linestyle='-',
+    #                                marker='None', label='Viktor',color="green")
+    #ax.plot_date(mpl_dates, cumsum(plot_values['Kim']), linestyle='-',
+    #                                marker='None', label='Kim', color="red")
+    #ax.plot_date(mpl_dates, cumsum(plot_values['Olof']), linestyle='-',
+    #                                marker='None', label='Olof', color="blue")
+    #! -------------------------- !#
     # formatting
     dateFmt = mpl.dates.DateFormatter('%b')
+    ax.legend(loc=2)
     ax.xaxis.set_major_formatter(dateFmt)
     monthsLoc = mpl.dates.MonthLocator()
     ax.xaxis.set_major_locator(monthsLoc)
@@ -92,15 +95,13 @@ def plot_month(competitors, year, month, dates, values):
     fig = Figure(facecolor=color , edgecolor = color)
     ax = fig.add_subplot(111)
     mpl_dates = mpl.dates.date2num(plot_dates)
-    ax.plot_date(mpl_dates, cumsum(plot_values['Viktor']), linestyle='-',
-                                marker='None', label='Viktor', color='green')
-    ax.plot_date(mpl_dates, cumsum(plot_values['Kim']), linestyle='-',
-                                    marker='None', label='Kim', color = 'red')
-    ax.plot_date(mpl_dates, cumsum(plot_values['Olof']), linestyle='-',
-                                    marker='None', label='Olof', color='blue')
-    ax.legend(loc=2)
-    
+    plot_colors = ['green', 'blue', 'red']
+    for competitor, color in zip(competitors, plot_colors):
+        ax.plot_date(mpl_dates, cumsum(plot_values[competitor]), linestyle='-',
+                                    marker='None', label=competitor, color=color)
+
     # formatting
+    ax.legend(loc=2)
     dateFmt = mpl.dates.DateFormatter('%Y-%m-%d')
     ax.xaxis.set_major_formatter(dateFmt)  
     daysLoc = mpl.dates.AutoDateLocator(maxticks = 7)

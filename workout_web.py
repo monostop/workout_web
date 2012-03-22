@@ -42,7 +42,7 @@ def add():
         try:                
             if bool(request.form['date']) and dateutil.parser.parse(request.form['date']):
                 # if user submits empty string dont insert anything into db.        
-                g.db.execute('INSERT INTO '+session['user']+ '(date,value) VALUES (?,?)', \
+                g.db.execute('INSERT INTO '+session['user']+' (date,value) VALUES (?,?)', \
                                  [request.form['date'],request.form['value']] ) 
                 g.db.commit() 
                 added_date = dateutil.parser.parse(request.form['date'])
@@ -89,15 +89,14 @@ def show_graph():
         session['month'] = month         
     return render_template('show_graph.html', month = session['month'])
 
-    
 @app.route('/graph.png')
 def graph_url(): 
     values = {}
     dates = {}
-    competitors = ['Viktor', 'Kim', 'Olof'] 
+    competitors = app.config['USERNAMES'] 
     for competitor in competitors:            
         sql = "SELECT * FROM "+competitor 
-        cur = g.db.execute(sql)                          
+        cur = g.db.execute(sql)
         data = cur.fetchall() 
         dates_txt = [s[1] for s in data]
         values[competitor] = [i[2] for i in data]
@@ -118,5 +117,17 @@ def graph_url():
     response.headers['Conent-Type'] = 'image/png'
     return response
         
+@app.route('/admin', methods=['GET', 'POST'])
+def admin():
+    cur = g.db.execute('SELECT * FROM ' + session['user'])
+    workouts = [dict(id=row[0], date=row[1], value=row[2]) for row in cur.fetchall()]
+    if request.method == 'POST':
+        for form in request.form: 
+            g.db.execute('DELETE FROM ' + session['user'] + ' WHERE Id=?',[form])
+            g.db.commit()
+        flash('Workouts successfully deleted')
+        return redirect(url_for('admin'))
+    return render_template('admin.html',workouts=workouts)
+
 if __name__=="__main__":
     app.run()

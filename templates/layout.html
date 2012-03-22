@@ -9,6 +9,7 @@
         <a href="{{ url_for('login') }}">log in</a>
     {% else %}
         <a href="{{ url_for('logout') }}">log out</a> 
+        <a href="{{ url_for('admin') }}">admin</a>
         <a href="{{ url_for('show_graph') }}"> progress</a>
         <a href="{{ url_for('add') }}">add new </a>
     {% endif %}
