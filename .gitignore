@@ -4,3 +4,6 @@ config.py
 *.swp
 index.py
 TODO
+jquery*
+static/script/css/
+scripts/
