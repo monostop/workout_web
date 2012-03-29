@@ -8,7 +8,6 @@ from flask import Flask, request, session, g, redirect, url_for, abort,render_te
 from plotvalues import plot_total, plot_month
 import gc
 
-# TOOO ERROR HANDELING IN ADD!
 #create app
 app = Flask(__name__)
 app.config.from_object('config')
@@ -39,19 +38,21 @@ def main_page():
 @app.route('/add', methods = ['GET','POST'])
 def add():
     if request.method == 'POST':
-        try:                
-            if bool(request.form['date']) and dateutil.parser.parse(request.form['date']):
-                # if user submits empty string dont insert anything into db.        
-                g.db.execute('INSERT INTO '+session['user']+' (date,value) VALUES (?,?)', \
-                                 [request.form['date'],request.form['value']] ) 
-                g.db.commit() 
-                added_date = dateutil.parser.parse(request.form['date'])
-                flash('A workout with value ' + request.form['value'] + ', successfully submitted on: ' + added_date.strftime("%A the %d of %B, %Y."))   
-            else:
-                flash('No workout submitted, check formating!')         
+        try: 
+            inputDate = dateutil.parser.parse(request.form['date'])
         except (ValueError, OverflowError):
             flash('No workout submitted, check formating!')
-            pass              
+            pass
+        else:
+            if bool(request.form['date']):
+                # if user submits empty string dont insert anything into db.        
+                dateString = inputDate.isoformat()
+                g.db.execute('INSERT INTO '+session['user']+' (date,value) VALUES (?,?)', \
+                                 [dateString,request.form['value']] ) 
+                g.db.commit() 
+                flash('A workout with value ' + request.form['value'] + ', successfully submitted on: ' + inputDate.strftime("%A the %d of %B, %Y."))   
+            else:
+                flash('You must enter a date!')         
     return render_template('add.html') 
 
 
