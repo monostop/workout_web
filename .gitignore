@@ -5,5 +5,4 @@ config.py
 index.py
 TODO
 jquery*
-static/script/css/
 scripts/
