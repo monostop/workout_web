@@ -50,7 +50,6 @@ def add():
                 cur = g.db.execute('SELECT date FROM ' + session['user'] + \
                                    ' WHERE date=?',[dateString])
                 if (not cur.fetchall()): # If date is not allready in DB
-                    g.db.execute('SELECT date FROM' + session['user'])
                     g.db.execute('INSERT INTO '+session['user']+' (date,value) \
                              VALUES (?,?)', [dateString,request.form['value']] ) 
                                      
