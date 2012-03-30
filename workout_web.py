@@ -4,11 +4,10 @@ from contextlib import closing
 import sqlite3
 import dateutil.parser
 import datetime
-from flask import Flask, request, session, g, redirect, url_for, abort,render_template, flash, make_response
+from flask import *
 from plotvalues import plot_total, plot_month
 import gc
 
-# TOOO ERROR HANDELING IN ADD!
 #create app
 app = Flask(__name__)
 app.config.from_object('config')
@@ -36,22 +35,34 @@ def teardown_request(exception):
 def main_page():
     return render_template('login.html')
 
+
 @app.route('/add', methods = ['GET','POST'])
 def add():
     if request.method == 'POST':
-        try:                
-            if bool(request.form['date']) and dateutil.parser.parse(request.form['date']):
-                # if user submits empty string dont insert anything into db.        
-                g.db.execute('INSERT INTO '+session['user']+' (date,value) VALUES (?,?)', \
-                                 [request.form['date'],request.form['value']] ) 
-                g.db.commit() 
-                added_date = dateutil.parser.parse(request.form['date'])
-                flash('A workout with value ' + request.form['value'] + ', successfully submitted on: ' + added_date.strftime("%A the %d of %B, %Y."))   
-            else:
-                flash('No workout submitted, check formating!')         
+        try: 
+            inputDate = dateutil.parser.parse(request.form['date'])
         except (ValueError, OverflowError):
             flash('No workout submitted, check formating!')
-            pass              
+            pass
+        else:
+            if bool(request.form['date']): # If user has input data
+                dateString = inputDate.strftime("%Y-%m-%d")
+                cur = g.db.execute('SELECT date FROM ' + session['user'] + \
+                                   ' WHERE date=?',[dateString])
+                if (not cur.fetchall()): # If date is not allready in DB
+                    g.db.execute('SELECT date FROM' + session['user'])
+                    g.db.execute('INSERT INTO '+session['user']+' (date,value) \
+                             VALUES (?,?)', [dateString,request.form['value']] ) 
+                                     
+                    g.db.commit() 
+                    flash('A workout with value ' + request.form['value'] + \
+                          ', successfully submitted on: ' \
+                          + inputDate.strftime("%A the %d of %B, %Y."))   
+                else:
+                    flash('This date is allready in database, no workout added')
+                    return render_template('add.html')
+            else:
+                flash('You must enter a date!')         
     return render_template('add.html') 
 
 
@@ -62,7 +73,8 @@ def login():
         login = request.form['login']
         if login not in app.config['USERNAMES']:
             error = 'Wrong login'
-        elif login in app.config['USERNAMES'] and app.config['PASSWORD'].get(login) == request.form['password']:
+        elif login in app.config['USERNAMES'] and \
+                app.config['PASSWORD'].get(login) == request.form['password']:
             session['user'] = request.form['login']    
             session['logged_in'] = True
             flash('You are now logged in!') 
@@ -120,10 +132,12 @@ def graph_url():
 @app.route('/admin', methods=['GET', 'POST'])
 def admin():
     cur = g.db.execute('SELECT * FROM ' + session['user'])
-    workouts = [dict(id=row[0], date=row[1], value=row[2]) for row in cur.fetchall()]
+    workouts = [dict(id=row[0], date=row[1], value=row[2]) for row in \
+                cur.fetchall()]
     if request.method == 'POST':
         for form in request.form: 
-            g.db.execute('DELETE FROM ' + session['user'] + ' WHERE Id=?',[form])
+            g.db.execute('DELETE FROM ' + session['user'] + ' WHERE Id=?',
+                         [form])
             g.db.commit()
         flash('Workouts successfully deleted')
         return redirect(url_for('admin'))
