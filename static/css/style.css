@@ -9,4 +9,4 @@ a, h1, h3 ,p    { color: #377BA8; font-family: 'Georgia', serif; }
 h1              { border-bottom: 2px solid #798589; }
 h3              { padding-bottom: 1px; }
 li              { list-style: none; margin}
-div.ui-datepicker {font-size:10px;}
+div.ui-datepicker {font-size:11px;}
